@@ -30,11 +30,7 @@ class ConsumerOrder(models.Model):
         return self.consumerCode
 
 class PointOwner(models.Model):
-    point = models.OneToOneField(
-        Point,
-        on_delete=models.CASCADE,
-        primary_key=True,
-    )
+    point = models.ForeignKey(Point, on_delete=models.CASCADE)
     email = models.CharField(max_length=50)
     password = models.CharField(max_length=20)
 
