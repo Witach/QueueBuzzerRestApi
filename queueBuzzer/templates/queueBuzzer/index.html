@@ -1,0 +1,15 @@
+
+{% if logo %}
+    <img src="http://127.0.0.1:8000/queueBuzzer{{ logo.url }}">
+{% endif %}
+<ul>
+        {% if image %}
+           <img src="http://127.0.0.1:8000/queueBuzzer{{ image.url }}">
+        {% endif %}
+    <h1>Products</h1>
+    {% for p in product %}
+    <li>
+        <p>{{ p.name }} {{ p.category }} {{ p.price }} </p>
+    </li>
+    {% endfor %}
+</ul>
