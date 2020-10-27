@@ -6,10 +6,10 @@ def index(request):
     point = get_object_or_404(Point)
     product = Product.objects.all()
     context = {
-        'image':point.image,
-        'logo': point.logoImage,
-        "product":product,
+        'image': point.image,
+        'logo': point.logo_image,
+        'product': product,
     }
 
-    return render(request,'queueBuzzer/index.html',context)
+    return render(request, 'queueBuzzer/index.html', context)
 # Create your views here.

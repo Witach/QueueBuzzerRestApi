@@ -6,8 +6,8 @@ class Consumer(models.Model):
 class Point(models.Model):
     name = models.CharField(max_length=50)
     image = models.ImageField(upload_to="images/")
-    logoImage = models.ImageField(upload_to="images/")
-    avgAwateTime = models.IntegerField()
+    logo_image = models.ImageField(upload_to="images/")
+    avg_await_time = models.IntegerField()
     color = models.CharField(max_length=20)
 
     def __str__(self):
@@ -21,13 +21,13 @@ class State(models.Model):
         return self.name
 
 class ConsumerOrder(models.Model):
-    consumerCode = models.CharField(max_length=20)
-    consumer = models.ForeignKey(Consumer,on_delete=models.CASCADE)
+    consumer_code = models.CharField(max_length=20)
+    consumer = models.ForeignKey(Consumer, on_delete=models.CASCADE)
     state = models.ForeignKey(State, on_delete=models.CASCADE)
     point = models.ForeignKey(Point, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.consumerCode
+        return self.consumer_code
 
 class PointOwner(models.Model):
     point = models.ForeignKey(Point, on_delete=models.CASCADE)
@@ -42,7 +42,7 @@ class Product(models.Model):
     price = models.FloatField()
     category = models.CharField(max_length=20)
     availability = models.BooleanField(default=True)
-    consumerOrder = models.ForeignKey(ConsumerOrder,on_delete=models.CASCADE)
+    consumer_order = models.ForeignKey(ConsumerOrder, on_delete=models.CASCADE)
     point = models.ForeignKey(Point, on_delete=models.CASCADE)
 
     def __str__(self):
