@@ -22,10 +22,8 @@ public class OrderState {
     @ManyToOne
     Point point;
 
-    Long consumerOrder;
-
     //revert
 
     @OneToMany(mappedBy = "orderState")
-    List<ConsumerOrder> stateList;
+    List<ConsumerOrder> consumerOrderList;
 }

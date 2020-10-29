@@ -3,6 +3,7 @@ package com.queuebuzzer.restapi.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class Consumer{
 
     //revert
 
-    @OneToOne(mappedBy = "consumer")
-    ConsumerOrder consumerOrder;
+    @OneToMany(mappedBy = "consumer")
+    List<ConsumerOrder> consumerOrders;
 
 }

@@ -6,11 +6,13 @@ import com.queuebuzzer.restapi.repository.PointOwnerRepository;
 import com.queuebuzzer.restapi.repository.PointRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Order(2)
 public class InitData implements CommandLineRunner {
 
     @Autowired
@@ -31,8 +33,8 @@ public class InitData implements CommandLineRunner {
 
 
         var pointOwner = PointOwner.builder()
-                        .emial("Witaszek98@wp.pl")
-                        .password("{noop}rrwertwer")
+                        .emial("covid19@gmail.com")
+                        .password("{noop}covid19")
                         .point(point)
                         .build();
         point.setPointOwnerList(List.of(pointOwner));

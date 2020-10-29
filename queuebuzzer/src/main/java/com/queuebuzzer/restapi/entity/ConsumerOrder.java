@@ -18,7 +18,7 @@ public class ConsumerOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @OneToOne()
+    @ManyToOne()
     Consumer consumer;
 
     @ManyToOne
