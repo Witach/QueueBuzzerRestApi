@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.queuebuzzer.restapi.utils.ListUtils.randomChoice;
+
 @Component
 @Order(1)
 @Profile("dev")
@@ -164,8 +166,6 @@ public class DBFeed implements CommandLineRunner {
         return randomChoice(fakeColours);
     }
 
-    private <T> T randomChoice(List<T> list) {
-         return list.get((int)(Math.random() * (list.size() - 1)));
-    }
+
 
 }
