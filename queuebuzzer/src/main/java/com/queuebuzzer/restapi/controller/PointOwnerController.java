@@ -21,9 +21,9 @@ public class PointOwnerController {
     PointOwnerService service;
 
     @ResponseStatus(OK)
-    @GetMapping("/{id}")
-    public PointOwnerDTO get(@PathVariable Long id) {
-        return service.getEntityById(id);
+    @GetMapping("/{email}")
+    public PointOwnerDTO get(@PathVariable String email) {
+        return service.getEntityByEmail(email);
     }
 
     @ResponseStatus(OK)

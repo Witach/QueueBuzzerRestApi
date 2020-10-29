@@ -23,8 +23,8 @@ public class PointOwnerService {
 
     static String EXCPETION_PATTERN_STRING = "PointOwner with id = %s does not exist";
 
-    public PointOwnerDTO getEntityById(Long id) {
-        var pointOwner = loadEntity(id);
+    public PointOwnerDTO getEntityByEmail(String email) {
+        var pointOwner = loadEntity(email);
         return entityMapper.convertIntoPointOwnerDTO(pointOwner);
     }
 
@@ -48,10 +48,10 @@ public class PointOwnerService {
         return entityMapper.convertIntoPointOwnerDTO(persistedPointOwner);
     }
 
-    public PointOwner loadEntity(Long id) {
-         return repository.findById(id)
+    public PointOwner loadEntity(String email) {
+         return repository.findByEmial(email)
                 .orElseThrow(
-                        () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
+                        () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , email))
                 );
     }
 }
