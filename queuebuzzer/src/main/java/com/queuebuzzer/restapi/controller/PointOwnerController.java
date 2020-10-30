@@ -2,6 +2,7 @@ package com.queuebuzzer.restapi.controller;
 
 import com.queuebuzzer.restapi.dto.pointowner.PointOwnerDTO;
 import com.queuebuzzer.restapi.dto.pointowner.PointOwnerPostDTO;
+import com.queuebuzzer.restapi.dto.product.ProductDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
 import com.queuebuzzer.restapi.entity.PointOwner;
 import com.queuebuzzer.restapi.service.PointOwnerService;
@@ -49,4 +50,5 @@ public class PointOwnerController {
     public PointOwnerDTO post(@RequestBody PointOwnerPostDTO dto) {
         return service.addEntity(dto);
     }
+
 }

@@ -46,4 +46,5 @@ public class ProductController {
     public ProductDTO post(@RequestBody ProductPostDTO dto) {
         return service.addEntity(dto);
     }
+
 }

@@ -1,13 +1,16 @@
 package com.queuebuzzer.restapi.controller;
 
+import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
+import com.queuebuzzer.restapi.dto.product.ProductDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
 import com.queuebuzzer.restapi.service.PointService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -18,6 +21,9 @@ public class PointController {
 
     @Autowired
     PointService service;
+
+    @Autowired
+    EntityMapper entityMapper;
 
     @ResponseStatus(OK)
     @GetMapping("/{id}")
@@ -47,5 +53,13 @@ public class PointController {
     @PostMapping
     public PointDTO post(@RequestBody PointPostDTO dto) {
         return service.addEntity(dto);
+    }
+
+    @ResponseStatus(OK)
+    @GetMapping("/{id}/products")
+    public List<ProductDTO> getProductsOfPoint(@PathVariable Long id) {
+        return service.loadEntity(id).getProductList().stream()
+                .map(entityMapper::convertProductIntoDTO)
+                .collect(Collectors.toList());
     }
 }
