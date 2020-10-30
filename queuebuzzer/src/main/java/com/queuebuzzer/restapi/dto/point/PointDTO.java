@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PointDTO {
+    Long id;
     String name;
     Long avgAwaitTime;
     String colour;

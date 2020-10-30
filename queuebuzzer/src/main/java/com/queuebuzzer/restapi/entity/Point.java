@@ -28,7 +28,7 @@ public class Point {
     @OneToMany(mappedBy = "point")
     List<ConsumerOrder> consumerOrderList;
 
-    @OneToMany(mappedBy = "point")
+    @OneToMany(mappedBy = "point", fetch = FetchType.EAGER)
     List<PointOwner> pointOwnerList;
 
     @OneToMany(mappedBy = "point")

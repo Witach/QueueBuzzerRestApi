@@ -4,6 +4,7 @@ import com.queuebuzzer.restapi.entity.Point;
 import com.queuebuzzer.restapi.entity.PointOwner;
 import com.queuebuzzer.restapi.repository.PointOwnerRepository;
 import com.queuebuzzer.restapi.repository.PointRepository;
+import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
@@ -22,22 +23,18 @@ public class InitData implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
-        var point = pointRepository.save(
-                Point.builder()
-                .avgAwaitTime(20_000L)
-                .colour("#FFFFFF")
-                .name("Zahir")
-                .build()
-        );
-
-
-        var pointOwner = PointOwner.builder()
+        var pointOwner = pointOwnerRepository.save(PointOwner.builder()
                         .emial("covid19@gmail.com")
                         .password("{noop}covid19")
-                        .point(point)
-                        .build();
-        point.setPointOwnerList(List.of(pointOwner));
+                        .build());
+
+        var point = pointRepository.findById(2L)
+                .orElseThrow(
+                        () -> new EntityDoesNotExistsException("Point with id = 2 does not exist")
+                );
+
+        pointOwner.setPoint(point);
+        point.getPointOwnerList().add(pointOwner);
         pointOwnerRepository.save(pointOwner);
     }
 }
