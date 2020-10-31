@@ -66,7 +66,7 @@ public class PointController {
 
     @ResponseStatus(CREATED)
     @PostMapping("/{id}/products")
-    public void getProductsOfPoint(@PathVariable Long id, @RequestBody List<ProductPostDTO> productPostDTOS) {
+    public void postProductsOfPoint(@PathVariable Long id, @RequestBody List<ProductPostDTO> productPostDTOS) {
         service.createMenu(productPostDTOS, id);
     }
 }

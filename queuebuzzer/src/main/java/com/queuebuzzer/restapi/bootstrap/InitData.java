@@ -22,7 +22,7 @@ public class InitData implements CommandLineRunner {
     PointOwnerRepository pointOwnerRepository;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         var pointOwner = pointOwnerRepository.save(PointOwner.builder()
                         .emial("covid19@gmail.com")
                         .password("{noop}covid19")

@@ -173,7 +173,5 @@ public class DBFeed implements CommandLineRunner {
     private String getFakeColour() {
         return randomChoice(fakeColours);
     }
-
-
-
+    
 }
