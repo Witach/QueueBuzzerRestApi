@@ -26,7 +26,6 @@ public interface EntityMapper {
 
     @Mapping(source = "point.id", target = "point")
     ProductDTO convertProductIntoDTO(Product product);
-    @Mapping(target = "point.id", source = "point")
     Product convertIntoProduct(ProductPostDTO productPostDTO);
 
     PointDTO convertPointIntoDTO(Point point);

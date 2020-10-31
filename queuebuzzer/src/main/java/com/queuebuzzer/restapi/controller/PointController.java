@@ -4,6 +4,7 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
+import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
 import com.queuebuzzer.restapi.service.PointService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,5 +62,11 @@ public class PointController {
         return service.loadEntity(id).getProductList().stream()
                 .map(entityMapper::convertProductIntoDTO)
                 .collect(Collectors.toList());
+    }
+
+    @ResponseStatus(CREATED)
+    @PostMapping("/{id}/products")
+    public void getProductsOfPoint(@PathVariable Long id, @RequestBody List<ProductPostDTO> productPostDTOS) {
+        service.createMenu(productPostDTOS, id);
     }
 }
