@@ -18,7 +18,7 @@ import static com.queuebuzzer.restapi.utils.ListUtils.randomChoice;
 
 @Component
 @Order(1)
-@Profile("dev")
+@Profile({"dev", "devauth"})
 public class DBFeed implements CommandLineRunner {
 
     PointRepository pointRepository;

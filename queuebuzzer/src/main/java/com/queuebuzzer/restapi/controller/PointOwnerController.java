@@ -1,5 +1,6 @@
 package com.queuebuzzer.restapi.controller;
 
+import com.queuebuzzer.restapi.dto.pointowner.EditPointOwner;
 import com.queuebuzzer.restapi.dto.pointowner.PointOwnerDTO;
 import com.queuebuzzer.restapi.dto.pointowner.PointOwnerPostDTO;
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
@@ -35,7 +36,7 @@ public class PointOwnerController {
 
     @ResponseStatus(CREATED)
     @PatchMapping("/{id}")
-    public void update(@RequestBody PointOwnerPostDTO dto, @PathVariable Long id) {
+    public void update(@RequestBody EditPointOwner dto, @PathVariable Long id) {
         service.updateEntity(dto, id);
     }
 

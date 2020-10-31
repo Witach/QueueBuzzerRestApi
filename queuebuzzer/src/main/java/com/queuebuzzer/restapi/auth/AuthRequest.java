@@ -1,14 +1,15 @@
-package com.queuebuzzer.restapi.dto.pointowner;
+package com.queuebuzzer.restapi.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PointOwnerPostDTO {
-    String emial;
-    String password;
+public class AuthRequest {
+    private String username;
+    private String password;
 }

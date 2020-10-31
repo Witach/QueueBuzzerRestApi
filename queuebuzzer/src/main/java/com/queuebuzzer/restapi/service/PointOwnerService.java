@@ -2,14 +2,17 @@ package com.queuebuzzer.restapi.service;
 
 import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumer.ConsumerPostDTO;
+import com.queuebuzzer.restapi.dto.pointowner.EditPointOwner;
 import com.queuebuzzer.restapi.dto.pointowner.PointOwnerDTO;
 import com.queuebuzzer.restapi.dto.pointowner.PointOwnerPostDTO;
 import com.queuebuzzer.restapi.entity.PointOwner;
 import com.queuebuzzer.restapi.repository.PointOwnerRepository;
+import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +24,10 @@ public class PointOwnerService {
     @Autowired
     EntityMapper entityMapper;
 
-    static String EXCPETION_PATTERN_STRING = "PointOwner with id = %s does not exist";
+    @Autowired
+    PointRepository pointRepository;
+
+    static public String EXCPETION_PATTERN_STRING = "PointOwner with id = %s does not exist";
 
     public PointOwnerDTO getEntityByEmail(String email) {
         var pointOwner = loadEntity(email);
@@ -34,7 +40,17 @@ public class PointOwnerService {
                 .collect(Collectors.toList());
     }
 
-    public void updateEntity(PointOwnerPostDTO dto, Long id) {
+    public void updateEntity(EditPointOwner dto, Long id) {
+        var pointOwner = repository.findById(id)
+                .orElseThrow(() -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING, id)));
+
+        var point = pointRepository.findById(dto.getPointId())
+                .orElseThrow(() -> new EntityDoesNotExistsException(String.format(PointService.EXCPETION_PATTERN_STRING, id)));
+
+        point.getPointOwnerList().add(pointOwner);
+        pointOwner.setPoint(point);
+        pointRepository.save(point);
+        repository.save(pointOwner);
     }
 
     public void deleteEntity(Long id) {

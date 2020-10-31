@@ -51,9 +51,6 @@ public interface EntityMapper {
     })
     PointOwnerDTO convertIntoPointOwnerDTO(PointOwner pointOwner);
 
-    @Mappings({
-            @Mapping(target = "point.id", source = "pointId"),
-    })
     PointOwner convertIntoPointOwner(PointOwnerPostDTO pointOwnerPostDTO);
 
     default String mapState(OrderState orderState) {
