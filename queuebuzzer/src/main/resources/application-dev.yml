@@ -11,11 +11,11 @@ spring:
   h2:
     console:
       enabled: true
-  flyway:
-    enabled: false
-  security:
-    user:
-      name:
-        admin
-      password:
-        '{noop}admin'
+#  flyway:
+#    enabled: false
+#  security:
+#    user:
+#      name:
+#        admin
+#      password:
+#        '{noop}admin'

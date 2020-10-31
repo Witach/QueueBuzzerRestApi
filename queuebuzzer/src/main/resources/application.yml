@@ -1,3 +1,7 @@
 spring:
   profiles:
     active: dev
+
+fake-generator:
+  enabled: true
+  number-of-points: 30

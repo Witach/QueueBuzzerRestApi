@@ -3,6 +3,7 @@ package com.queuebuzzer.restapi.bootstrap;
 import com.github.javafaker.Faker;
 import com.queuebuzzer.restapi.entity.*;
 import com.queuebuzzer.restapi.repository.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
@@ -28,6 +29,11 @@ public class DBFeed implements CommandLineRunner {
     ProductRepository productRepository;
     Faker faker;
 
+    @Value("${fake-generator.number-of-points}")
+    int numberOfPoints;
+    @Value("${fake-generator.enabled}")
+    boolean enabled;
+
     List<String> fakeColours = List.of("#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#0004ff");
 
     public DBFeed(PointRepository pointRepository, PointOwnerRepository pointOwnerRepository, ConsumerRepository consumerRepository, ConsumerOrderRepository consumerOrderRepository, StateRepository stateRepository, ProductRepository productRepository, Faker faker) {
@@ -42,9 +48,11 @@ public class DBFeed implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        var fakePoints = IntStream.range(0, 20)
-        .mapToObj(i -> fakePoint())
-        .collect(Collectors.toList());
+        if (enabled) {
+            var fakePoints = IntStream.range(0, numberOfPoints)
+                    .mapToObj(i -> fakePoint())
+                    .collect(Collectors.toList());
+        }
     }
 
 
