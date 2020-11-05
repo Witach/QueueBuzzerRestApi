@@ -8,11 +8,16 @@ import com.queuebuzzer.restapi.entity.Point;
 import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.repository.ProductRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+
+import static java.util.Objects.requireNonNullElse;
 
 @Service
 public class PointService {
@@ -40,6 +45,24 @@ public class PointService {
     }
 
     public void updateEntity(PointPostDTO dto, Long id) {
+        var loadedPoint = loadEntity(id);
+
+
+        loadedPoint.setColour(dto.getColour());
+        loadedPoint.setName(dto.getName());
+
+        repository.save(loadedPoint);
+    }
+
+    public void patchEntity(PointPostDTO dto, Long id) {
+        var loadedPoint = loadEntity(id);
+
+
+
+        loadedPoint.setColour(requireNonNullElse(dto.getColour(), loadedPoint.getColour()));
+        loadedPoint.setName(dto.getName());
+
+        repository.save(loadedPoint);
     }
 
     public void deleteEntity(Long id) {
