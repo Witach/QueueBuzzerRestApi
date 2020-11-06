@@ -31,7 +31,7 @@ public class AuthController {
 
 
     @PostMapping
-    public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthRequest authenticationRequest) {
+    public ResponseEntity<AUthResponse> createAuthenticationToken(@RequestBody AuthRequest authenticationRequest) {
         authenticationManager.authenticate(authTokenFromAuthRequest(authenticationRequest));
 
         final var userDetails = myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
