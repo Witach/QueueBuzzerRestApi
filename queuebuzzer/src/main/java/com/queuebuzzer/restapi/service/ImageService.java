@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 @Service
-public class ImageServie {
+public class ImageService {
 
     @Autowired
     ResourceLoader resourceLoader;

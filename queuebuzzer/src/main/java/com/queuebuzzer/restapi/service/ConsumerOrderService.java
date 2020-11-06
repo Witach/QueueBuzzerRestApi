@@ -41,9 +41,9 @@ public class ConsumerOrderService {
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
     }
+//    public void updateEntity(ConsumerOrderPostDTO dto, Long id) {
+//    }
 
-    public void updateEntity(ConsumerOrderPostDTO dto, Long id) {
-    }
 
     public void deleteEntity(Long id) {
         if(!repository.existsById(id))

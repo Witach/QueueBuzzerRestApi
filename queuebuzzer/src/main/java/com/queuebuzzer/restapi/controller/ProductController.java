@@ -2,7 +2,7 @@ package com.queuebuzzer.restapi.controller;
 
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
-import com.queuebuzzer.restapi.service.ImageServie;
+import com.queuebuzzer.restapi.service.ImageService;
 import com.queuebuzzer.restapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -10,9 +10,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
@@ -25,7 +22,7 @@ public class ProductController {
     ProductService service;
 
     @Autowired
-    ImageServie imageServie;
+    ImageService imageService;
 
     @ResponseStatus(OK)
     @GetMapping("/{id}")
@@ -60,13 +57,13 @@ public class ProductController {
     @ResponseStatus(OK)
     @GetMapping("/{id}/image")
     public  byte[] getImage(@PathVariable Long id, HttpServletRequest request) throws IOException {
-        return imageServie.loadImage(id, request.getRealPath("/") + "/product");
+        return imageService.loadImage(id, request.getRealPath("/") + "/product");
     }
 
     @ResponseStatus(OK)
     @PostMapping("/{id}/image")
     public void  saveImage(@PathVariable Long id, HttpServletRequest request, @RequestParam("file") MultipartFile file) {
-        imageServie.saveImage(file, "product-" + id + ".jpg");
+        imageService.saveImage(file, "product-" + id + ".jpg");
     }
 
 }

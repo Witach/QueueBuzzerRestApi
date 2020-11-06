@@ -29,11 +29,11 @@ public class ConsumerOrderController {
         return service.getAllEntities();
     }
 
-    @ResponseStatus(CREATED)
-    @PatchMapping("/{id}")
-    public void update(@RequestBody ConsumerOrderPostDTO dto, @PathVariable Long id) {
-        service.updateEntity(dto, id);
-    }
+//    @ResponseStatus(CREATED)
+//    @PatchMapping("/{id}")
+//    public void update(@RequestBody ConsumerOrderPostDTO dto, @PathVariable Long id) {
+//        service.updateEntity(dto, id);
+//    }
 
     @ResponseStatus(NO_CONTENT)
     @DeleteMapping("/{id}")

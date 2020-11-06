@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class PointOwnerService {
+public class  PointOwnerService {
     @Autowired
     PointOwnerRepository repository;
 
@@ -41,8 +41,7 @@ public class PointOwnerService {
     }
 
     public void updateEntity(EditPointOwner dto, Long id) {
-        var pointOwner = repository.findById(id)
-                .orElseThrow(() -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING, id)));
+        var pointOwner = loadEntity(id);
 
         var point = pointRepository.findById(dto.getPointId())
                 .orElseThrow(() -> new EntityDoesNotExistsException(String.format(PointService.EXCPETION_PATTERN_STRING, id)));
@@ -68,6 +67,13 @@ public class PointOwnerService {
          return repository.findByEmial(email)
                 .orElseThrow(
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , email))
+                );
+    }
+
+    public PointOwner loadEntity(Long id) {
+        return repository.findById(id)
+                .orElseThrow(
+                        () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
     }
 }

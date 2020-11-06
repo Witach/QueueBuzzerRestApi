@@ -47,9 +47,9 @@ public class PointService {
     public void updateEntity(PointPostDTO dto, Long id) {
         var loadedPoint = loadEntity(id);
 
-
-        loadedPoint.setColour(dto.getColour());
-        loadedPoint.setName(dto.getName());
+        loadedPoint.setColour( Objects.requireNonNullElse(dto.getColour(),loadedPoint.getColour()));
+        loadedPoint.setName(Objects.requireNonNullElse(dto.getName(),loadedPoint.getName()));
+        loadedPoint.setAvgAwaitTime(Objects.requireNonNullElse(dto.getAvgAwaitTime(),loadedPoint.getAvgAwaitTime()));
 
         repository.save(loadedPoint);
     }

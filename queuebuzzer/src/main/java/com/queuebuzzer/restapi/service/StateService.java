@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +36,11 @@ public class StateService {
     }
 
     public void updateEntity(StatePostDTO dto, Long id) {
+        var stateLoad = loadEntity(id);
+
+        stateLoad.setName(Objects.requireNonNullElse(dto.getName(), stateLoad.getName()));
+
+        repository.save(stateLoad);
     }
 
     public void deleteEntity(Long id) {

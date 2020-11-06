@@ -4,12 +4,14 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
 import com.queuebuzzer.restapi.entity.Product;
+import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.repository.ProductRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -19,7 +21,12 @@ public class ProductService {
     ProductRepository repository;
 
     @Autowired
+    PointRepository pointRepository;
+
+    @Autowired
     EntityMapper entityMapper;
+
+
 
     static String EXCPETION_PATTERN_STRING = "Product with id = %s does not exist";
 
@@ -35,6 +42,14 @@ public class ProductService {
     }
 
     public void updateEntity(ProductPostDTO dto, Long id) {
+        var productLoad = loadEntity(id);
+
+        productLoad.setAvaliability(Objects.requireNonNullElse(dto.getAvaliability(),productLoad.getAvaliability()));
+        productLoad.setCategory(Objects.requireNonNullElse(dto.getCategory(),productLoad.getCategory()));
+        productLoad.setName(Objects.requireNonNullElse(dto.getName(),productLoad.getName()));
+        productLoad.setPrice(Objects.requireNonNullElse(dto.getPrice(),productLoad.getPrice()));
+
+        repository.save(productLoad);
     }
 
     public void deleteEntity(Long id) {
