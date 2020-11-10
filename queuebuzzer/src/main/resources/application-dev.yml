@@ -19,3 +19,6 @@ spring:
 #        admin
 #      password:
 #        '{noop}admin'
+fake-generator:
+  enabled: true
+  number-of-points: 30
