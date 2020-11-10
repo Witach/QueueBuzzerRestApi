@@ -8,3 +8,5 @@ spring:
   #      h2
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
+    hibernate:
+     ddl-auto: update
