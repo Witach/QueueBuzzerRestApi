@@ -1,21 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:polish_station_db
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: password
+    url: jdbc:postgres://qixpctvvbetbee:3c0c20b43b0982c8ac56e81369cce4036ec866b9c2bdb4f5f0aefa1b3a4e098f@ec2-54-76-215-139.eu-west-1.compute.amazonaws.com:5432/d5giuadleijked
+    driver-class-name: org.postgresql.Driver
+    username: qixpctvvbetbee
+    password: 3c0c20b43b0982c8ac56e81369cce4036ec866b9c2bdb4f5f0aefa1b3a4e098f
   #    platform:
   #      h2
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
-  h2:
-    console:
-      enabled: true
-  flyway:
-    enabled: false
-  security:
-    user:
-      name:
-        admin
-      password:
-        '{noop}admin'
+    database-platform: org.hibernate.dialect.PostgreSQL94Dialect
