@@ -5,7 +5,9 @@ import com.queuebuzzer.restapi.repository.PointOwnerRepository;
 import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -18,6 +20,9 @@ public class InitData implements CommandLineRunner {
     @Autowired
     PointOwnerRepository pointOwnerRepository;
 
+    @Value("${spring.profiles.active}")
+    String profile;
+
     @Override
     public void run(String... args) {
         var pointOwner = pointOwnerRepository.save(PointOwner.builder()
@@ -25,13 +30,15 @@ public class InitData implements CommandLineRunner {
                         .password("{noop}covid19")
                         .build());
 
-        var point = pointRepository.findById(2L)
-                .orElseThrow(
-                        () -> new EntityDoesNotExistsException("Point with id = 2 does not exist")
-                );
+        if (profile.equals("dev") || profile.equals("devauth")) {
+            var point = pointRepository.findById(2L)
+                    .orElseThrow(
+                            () -> new EntityDoesNotExistsException("Point with id = 2 does not exist")
+                    );
 
-        pointOwner.setPoint(point);
-        point.getPointOwnerList().add(pointOwner);
-        pointOwnerRepository.save(pointOwner);
+            pointOwner.setPoint(point);
+            point.getPointOwnerList().add(pointOwner);
+            pointOwnerRepository.save(pointOwner);
+        }
     }
 }
