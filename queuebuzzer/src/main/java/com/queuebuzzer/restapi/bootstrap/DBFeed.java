@@ -110,6 +110,7 @@ public class DBFeed implements CommandLineRunner {
                 .category(faker.animal().name())
                 .price(Math.round(Math.random() * 10000.0) / 100.0)
                 .name(faker.food().dish())
+                .description(faker.lorem().fixedString(64))
                 .consumerOrderList(new LinkedList<>())
                 .build());
 

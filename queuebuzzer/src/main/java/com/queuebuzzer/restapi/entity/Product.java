@@ -28,4 +28,6 @@ public class Product {
 
     @ManyToMany(mappedBy = "productList")
     List<ConsumerOrder> consumerOrderList;
+
+    String description;
 }

@@ -15,4 +15,5 @@ public class ProductPostDTO {
     String category;
     Boolean avaliability;
     Long point;
+    String description;
 }
