@@ -28,6 +28,7 @@ public class DBFeed implements CommandLineRunner {
     StateRepository stateRepository;
     ProductRepository productRepository;
     Faker faker;
+    List<String> categories;
 
     @Value("${fake-generator.number-of-points}")
     int numberOfPoints;
@@ -44,6 +45,10 @@ public class DBFeed implements CommandLineRunner {
         this.stateRepository = stateRepository;
         this.productRepository = productRepository;
         this.faker = faker;
+        this.categories = IntStream.range(0, 10)
+                .mapToObj(i -> faker.animal().name())
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -107,7 +112,7 @@ public class DBFeed implements CommandLineRunner {
     private Product fakeProduct() {
         return productRepository.save(Product.builder()
                 .avaliability(Math.random() < 0.5)
-                .category(faker.animal().name())
+                .category(randomChoice(categories))
                 .price(Math.round(Math.random() * 10000.0) / 100.0)
                 .name(faker.food().dish())
                 .description(faker.lorem().fixedString(64))
