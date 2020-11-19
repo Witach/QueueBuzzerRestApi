@@ -18,7 +18,7 @@ import javax.swing.plaf.nimbus.State;
 import java.util.stream.Collectors;
 
 @Component
-@Order(2)
+@Order(3)
 public class InitData implements CommandLineRunner {
 
     @Autowired
@@ -26,20 +26,11 @@ public class InitData implements CommandLineRunner {
     @Autowired
     PointOwnerRepository pointOwnerRepository;
 
-    @Autowired
-    OrderStateRepository orderStateRepository;
-
     @Value("${spring.profiles.active}")
     String profile;
 
     @Override
     public void run(String... args) {
-
-        var defaultStates = DefaultStates.DEFAULT_STATES.stream()
-                .map(name -> OrderState.builder()
-                        .name(name).build()
-                ).collect(Collectors.toList());
-        orderStateRepository.saveAll(defaultStates);
 
         var pointOwner = pointOwnerRepository.save(PointOwner.builder()
                         .emial("covid19@gmail.com")

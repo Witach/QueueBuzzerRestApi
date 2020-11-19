@@ -3,8 +3,12 @@ package com.queuebuzzer.restapi.service;
 import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumer.ConsumerDTO;
 import com.queuebuzzer.restapi.dto.consumer.ConsumerPostDTO;
+import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
+import com.queuebuzzer.restapi.entity.ConsumerOrder;
+import com.queuebuzzer.restapi.repository.ConsumerOrderRepository;
 import com.queuebuzzer.restapi.repository.ConsumerRepository;
+import com.queuebuzzer.restapi.repository.OrderStateRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +25,12 @@ public class ConsumerService {
 
     @Autowired
     EntityMapper entityMapper;
+
+    @Autowired
+    ConsumerOrderRepository consumerOrderRepository;
+
+    @Autowired
+    OrderStateRepository orderStateRepository;
 
     static String EXCPETION_PATTERN_STRING = "PointOwner with id = %s does not exist";
 
@@ -59,5 +69,13 @@ public class ConsumerService {
                 .orElseThrow(
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
+    }
+
+    public List<ConsumerOrderDTO> getConsumerOrderList(Long id) {
+        var activeState = orderStateRepository.getActiveState()
+                .orElseThrow();
+        return consumerOrderRepository.findAllByConsumer_IdAndOrderStateEquals(id, activeState).stream()
+                .map(entityMapper::convertConsumerOrderIntoDTO)
+                .collect(Collectors.toList());
     }
 }

@@ -2,7 +2,9 @@ package com.queuebuzzer.restapi.controller;
 
 import com.queuebuzzer.restapi.dto.consumer.ConsumerDTO;
 import com.queuebuzzer.restapi.dto.consumer.ConsumerPostDTO;
+import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
+import com.queuebuzzer.restapi.entity.ConsumerOrder;
 import com.queuebuzzer.restapi.repository.ConsumerRepository;
 import com.queuebuzzer.restapi.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,4 +51,10 @@ public class ConsumerController {
     public ConsumerDTO post(@RequestBody ConsumerPostDTO dto) {
         return service.addEntity(dto);
     }
-}
+
+    @ResponseStatus(OK)
+    @GetMapping("/{id}/orders")
+    public List<ConsumerOrderDTO> consumerOrderList(@PathVariable Long id) {
+        return service.getConsumerOrderList(id);
+    }
+ }

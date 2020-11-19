@@ -3,12 +3,14 @@ package com.queuebuzzer.restapi.bootstrap;
 import com.github.javafaker.Faker;
 import com.queuebuzzer.restapi.entity.*;
 import com.queuebuzzer.restapi.repository.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,7 +19,7 @@ import java.util.stream.IntStream;
 import static com.queuebuzzer.restapi.utils.ListUtils.randomChoice;
 
 @Component
-@Order(1)
+@Order(2)
 @Profile({"dev", "devauth"})
 public class DBFeed implements CommandLineRunner {
 
@@ -29,6 +31,9 @@ public class DBFeed implements CommandLineRunner {
     ProductRepository productRepository;
     Faker faker;
     List<String> categories;
+
+    @Autowired
+    OrderStateRepository orderStateRepository;
 
     @Value("${fake-generator.number-of-points}")
     int numberOfPoints;
@@ -61,24 +66,28 @@ public class DBFeed implements CommandLineRunner {
     }
 
 
-     Point fakePoint() {
+    @Transactional
+    public Point fakePoint() {
+        var defaultOrderStates = orderStateRepository.getDefaultStates();
         var point = Point.builder()
                 .colour(getFakeColour())
                 .avgAwaitTime(getFakeAwgTime())
                 .consumerOrderList(fakeConsumerOrderList())
                 .name(faker.pokemon().name())
                 .pointOwnerList(fakePointOwnerList())
-                .orderStateList(fakeOrderStateList())
+                .orderStateList(defaultOrderStates)
                 .productList(fakeProductsList())
                 .build();
+        defaultOrderStates.forEach(orderState -> orderState.setPoint(point));
         point.getConsumerOrderList().forEach(pointConsumerOrderBinder(point));
         point.getProductList().forEach(product -> product.setPoint(point));
         point.getPointOwnerList().forEach(pointOwner -> pointOwner.setPoint(point));
+        point.getConsumerOrderList().forEach(order -> defaultOrderStates.get(0));
         pointRepository.save(point);
-
         consumerOrderRepository.saveAll(point.getConsumerOrderList());
         pointOwnerRepository.saveAll(point.getPointOwnerList());
         productRepository.saveAll(point.getProductList());
+        point.getOrderStateList().addAll(defaultOrderStates);
         stateRepository.saveAll(point.getOrderStateList());
         return point;
     }
@@ -99,7 +108,6 @@ public class DBFeed implements CommandLineRunner {
             consumerOrder.setPoint(point);
             var state = randomChoice(point.getOrderStateList());
             consumerOrder.setOrderState(state);
-            state.getConsumerOrderList().add(consumerOrder);
         };
     }
 
@@ -179,5 +187,5 @@ public class DBFeed implements CommandLineRunner {
     private String getFakeColour() {
         return randomChoice(fakeColours);
     }
-    
+
 }
