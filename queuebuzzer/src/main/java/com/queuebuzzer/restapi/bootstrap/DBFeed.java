@@ -77,6 +77,8 @@ public class DBFeed implements CommandLineRunner {
                 .pointOwnerList(fakePointOwnerList())
                 .orderStateList(defaultOrderStates)
                 .productList(fakeProductsList())
+                .currentMaxQueueNumber(0L)
+                .maxQueueNumber(99L)
                 .build();
         defaultOrderStates.forEach(orderState -> orderState.setPoint(point));
         point.getConsumerOrderList().forEach(pointConsumerOrderBinder(point));
@@ -169,6 +171,7 @@ public class DBFeed implements CommandLineRunner {
     private ConsumerOrder fakeConsumerOrder() {
         return consumerOrderRepository.save(ConsumerOrder.builder()
                 .productList(new LinkedList<>())
+                .queueNumber(0L)
                 .build());
     }
 

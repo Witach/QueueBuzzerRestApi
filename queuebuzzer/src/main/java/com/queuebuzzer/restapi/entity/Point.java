@@ -1,6 +1,5 @@
 package com.queuebuzzer.restapi.entity;
 
-import io.swagger.v3.oas.models.links.Link;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,6 +23,8 @@ public class Point {
     byte[] logoImg;
     Long avgAwaitTime;
     String colour;
+    Long currentMaxQueueNumber;
+    Long maxQueueNumber;
 
     //revert
 

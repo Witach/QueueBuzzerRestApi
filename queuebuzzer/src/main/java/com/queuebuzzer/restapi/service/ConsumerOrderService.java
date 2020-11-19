@@ -4,11 +4,13 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderPostDTO;
 import com.queuebuzzer.restapi.entity.ConsumerOrder;
-import com.queuebuzzer.restapi.repository.ConsumerOrderRepository;
+import com.queuebuzzer.restapi.entity.Product;
+import com.queuebuzzer.restapi.repository.*;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,6 +24,18 @@ public class ConsumerOrderService {
 
     @Autowired
     EntityMapper entityMapper;
+
+    @Autowired
+    PointRepository pointRepository;
+
+    @Autowired
+    OrderStateRepository orderStateRepository;
+
+    @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
+    ConsumerRepository consumerRepository;
 
     public ConsumerOrderDTO getEntityById(Long id) {
         var consumer = loadEntity(id);
@@ -53,7 +67,37 @@ public class ConsumerOrderService {
 
     public ConsumerOrderDTO addEntity(ConsumerOrderPostDTO dto) {
         var newConsumerOrder = entityMapper.convertIntoConsumerOrder(dto);
+        var point = pointRepository.findById(dto.getPointId()).orElseThrow(EntityExistsException::new);
+        var consumer = consumerRepository.findById(dto.getConsumerId()).orElseThrow(EntityExistsException::new);
+        var products = getProductsOfList(dto.getProductsIds());
+        var activeState = orderStateRepository.getActiveState().orElseThrow(EntityExistsException::new);
+
+
+        incrementQueueNumber(newConsumerOrder, point);
+        newConsumerOrder.setOrderState(orderStateRepository.getActiveState().orElseThrow(EntityExistsException::new));
+        newConsumerOrder.setProductList(products);
+        newConsumerOrder.setPoint(point);
+        newConsumerOrder.setConsumer(consumer);
+        newConsumerOrder.setOrderState(activeState);
+
         var persistedConsumerOrder = repository.save(newConsumerOrder);
+        pointRepository.save(point);
         return entityMapper.convertConsumerOrderIntoDTO(persistedConsumerOrder);
+    }
+
+    private List<Product> getProductsOfList(List<Long> productsIds) {
+        return productRepository.findAllById(productsIds);
+    }
+
+    private void incrementQueueNumber(ConsumerOrder newConsumerOrder, com.queuebuzzer.restapi.entity.Point point) {
+        var currenctQueueNumber = point.getCurrentMaxQueueNumber();
+        var maxNumber = point.getMaxQueueNumber();
+        if(currenctQueueNumber + 1 >= maxNumber ){
+            point.setCurrentMaxQueueNumber(0L);
+            newConsumerOrder.setQueueNumber(0L);
+        } else {
+            point.setCurrentMaxQueueNumber(currenctQueueNumber + 1);
+            newConsumerOrder.setQueueNumber(currenctQueueNumber + 1);
+        }
     }
 }

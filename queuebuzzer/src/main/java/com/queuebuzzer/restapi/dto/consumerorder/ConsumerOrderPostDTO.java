@@ -14,6 +14,5 @@ import java.util.List;
 public class ConsumerOrderPostDTO {
     Long consumerId;
     Long pointId;
-    String state;
     List<Long> productsIds;
 }

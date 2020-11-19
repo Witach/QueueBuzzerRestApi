@@ -18,6 +18,8 @@ public class ConsumerOrder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
+    Long queueNumber = 0L;
+
     @ManyToOne()
     Consumer consumer;
 

@@ -41,7 +41,8 @@ public interface EntityMapper {
 
     @Mappings({
             @Mapping(target = "consumerId", source = "consumer.id"),
-            @Mapping(target = "pointId", source = "point.id")
+            @Mapping(target = "pointId", source = "point.id"),
+            @Mapping(target = "state", source = "orderState")
     })
     ConsumerOrderDTO convertConsumerOrderIntoDTO(ConsumerOrder consumerOrder);
     ConsumerOrder convertIntoConsumerOrder(ConsumerOrderPostDTO consumerOrderPostDTO);
