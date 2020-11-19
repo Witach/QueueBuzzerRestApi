@@ -4,7 +4,9 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
+import com.queuebuzzer.restapi.entity.OrderState;
 import com.queuebuzzer.restapi.entity.Point;
+import com.queuebuzzer.restapi.repository.OrderStateRepository;
 import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.repository.ProductRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -27,6 +30,9 @@ public class PointService {
 
     @Autowired
     EntityMapper entityMapper;
+
+    @Autowired
+    OrderStateRepository orderStateRepository;
 
     @Autowired
     ProductRepository productRepository;
@@ -73,7 +79,12 @@ public class PointService {
     public PointDTO addEntity(PointPostDTO dto) {
         var newPoint = entityMapper.convertIntoPoint(dto);
         var persistedPoint = repository.save(newPoint);
-        return entityMapper.convertPointIntoDTO(persistedPoint);
+        var defaultStates = orderStateRepository.getDefaultStates();
+        newPoint.setOrderStateList(new LinkedList<>());
+        newPoint.getOrderStateList().addAll(defaultStates);
+        defaultStates.forEach(defaultState -> defaultState.setPoint(persistedPoint));
+        orderStateRepository.saveAll(defaultStates);
+        return entityMapper.convertPointIntoDTO(repository.save(newPoint));
     }
 
     public void createMenu(List<ProductPostDTO> productPostDTOS, Long id) {

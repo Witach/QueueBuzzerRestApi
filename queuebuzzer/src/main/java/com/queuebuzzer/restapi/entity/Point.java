@@ -1,8 +1,10 @@
 package com.queuebuzzer.restapi.entity;
 
+import io.swagger.v3.oas.models.links.Link;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -32,7 +34,7 @@ public class Point {
     List<PointOwner> pointOwnerList;
 
     @OneToMany(mappedBy = "point")
-    List<OrderState> orderStateList;
+    List<OrderState> orderStateList = new LinkedList<>();
 
     @OneToMany(mappedBy = "point")
     List<Product> productList;
