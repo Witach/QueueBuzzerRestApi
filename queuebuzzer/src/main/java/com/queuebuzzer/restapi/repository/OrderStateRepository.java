@@ -13,4 +13,6 @@ public interface OrderStateRepository extends JpaRepository<OrderState, Long> {
 
     @Query("from OrderState o where o.name in ('ACTIVE')")
     Optional<OrderState> getActiveState();
+    Optional<OrderState> findByName(String name);
+    Optional<OrderState> findByPointIdAndName(Long pointId, String name);
 }

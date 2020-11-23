@@ -37,6 +37,11 @@ public class ConsumerOrderService {
     @Autowired
     ConsumerRepository consumerRepository;
 
+    @Autowired
+    OrderStateRepository stateRepository;
+    @Autowired
+    ConsumerOrderRepository orderRepository;
+
     public ConsumerOrderDTO getEntityById(Long id) {
         var consumer = loadEntity(id);
         return entityMapper.convertConsumerOrderIntoDTO(consumer);
@@ -55,8 +60,22 @@ public class ConsumerOrderService {
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
     }
-//    public void updateEntity(ConsumerOrderPostDTO dto, Long id) {
-//    }
+    public void updateEntity(ConsumerOrderPostDTO dto, Long id) {
+        if(dto != null){
+            var newState = stateRepository.findByName(dto.getStateName())
+                    .orElseThrow(() -> new EntityDoesNotExistsException(String.format(PointService.EXCPETION_PATTERN_STRING, dto.getStateName())));
+            var order = loadEntity(id);
+            var oldState = order.getOrderState();
+
+            oldState.getConsumerOrderList().remove(order);
+            newState.getConsumerOrderList().add(order);
+            order.setOrderState(newState);
+            //TODO notify consumer about finished order, to implementation
+            orderRepository.save(order);
+            stateRepository.save(oldState);
+            stateRepository.save(newState);
+        }
+    }
 
 
     public void deleteEntity(Long id) {

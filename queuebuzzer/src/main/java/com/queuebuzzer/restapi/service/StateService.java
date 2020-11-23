@@ -4,7 +4,7 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.state.StateDTO;
 import com.queuebuzzer.restapi.dto.state.StatePostDTO;
 import com.queuebuzzer.restapi.entity.OrderState;
-import com.queuebuzzer.restapi.repository.StateRepository;
+import com.queuebuzzer.restapi.repository.OrderStateRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +16,12 @@ import java.util.stream.Collectors;
 @Service
 public class StateService {
 
-    @Autowired
-    StateRepository repository;
+
 
     @Autowired
     EntityMapper entityMapper;
+    @Autowired
+    OrderStateRepository repository;
 
     static String EXCPETION_PATTERN_STRING = "State with id = %s does not exist";
 

@@ -20,6 +20,7 @@ public class Product {
     String name;
     Double price;
     byte[] img;
+
     String category;
     Boolean avaliability;
 

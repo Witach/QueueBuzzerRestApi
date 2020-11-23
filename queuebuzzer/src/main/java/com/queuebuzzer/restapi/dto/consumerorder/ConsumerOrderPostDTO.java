@@ -12,6 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsumerOrderPostDTO {
+    String stateName;
     Long consumerId;
     Long pointId;
     List<Long> productsIds;

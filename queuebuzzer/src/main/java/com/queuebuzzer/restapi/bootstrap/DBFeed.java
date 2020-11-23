@@ -27,7 +27,7 @@ public class DBFeed implements CommandLineRunner {
     PointOwnerRepository pointOwnerRepository;
     ConsumerRepository consumerRepository;
     ConsumerOrderRepository consumerOrderRepository;
-    StateRepository stateRepository;
+    OrderStateRepository stateRepository;
     ProductRepository productRepository;
     Faker faker;
     List<String> categories;
@@ -42,7 +42,7 @@ public class DBFeed implements CommandLineRunner {
 
     List<String> fakeColours = List.of("#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#0004ff");
 
-    public DBFeed(PointRepository pointRepository, PointOwnerRepository pointOwnerRepository, ConsumerRepository consumerRepository, ConsumerOrderRepository consumerOrderRepository, StateRepository stateRepository, ProductRepository productRepository, Faker faker) {
+    public DBFeed(PointRepository pointRepository, PointOwnerRepository pointOwnerRepository, ConsumerRepository consumerRepository, ConsumerOrderRepository consumerOrderRepository, OrderStateRepository stateRepository, ProductRepository productRepository, Faker faker) {
         this.pointRepository = pointRepository;
         this.pointOwnerRepository = pointOwnerRepository;
         this.consumerRepository = consumerRepository;
