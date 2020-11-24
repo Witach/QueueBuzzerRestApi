@@ -11,4 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConsumerPostDTO {
     String consumerCode;
+    String emial;
+    String password;
 }

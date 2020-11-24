@@ -11,10 +11,12 @@ import com.queuebuzzer.restapi.repository.ConsumerRepository;
 import com.queuebuzzer.restapi.repository.OrderStateRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,9 @@ public class ConsumerService {
 
     @Autowired
     ConsumerOrderRepository consumerOrderRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     OrderStateRepository orderStateRepository;
@@ -60,6 +65,7 @@ public class ConsumerService {
 
     public ConsumerDTO addEntity(ConsumerPostDTO dto) {
         var newConsumer = entityMapper.convertIntoConsumer(dto);
+        Optional.ofNullable(dto.getPassword()).ifPresent((x) -> newConsumer.setPassword(passwordEncoder.encode(newConsumer.getPassword())));
         var persistedConsumer = repository.save(newConsumer);
         return entityMapper.convertConsumerIntoDTO(persistedConsumer);
     }

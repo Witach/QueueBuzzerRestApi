@@ -1,5 +1,7 @@
 package com.queuebuzzer.restapi.auth;
 
+import com.queuebuzzer.restapi.entity.AppUser;
+import com.queuebuzzer.restapi.repository.AppUserRepository;
 import com.queuebuzzer.restapi.repository.PointOwnerRepository;
 import com.queuebuzzer.restapi.service.PointOwnerService;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
@@ -16,7 +18,7 @@ import java.util.List;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Autowired
-    private PointOwnerRepository repository;
+    private AppUserRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {

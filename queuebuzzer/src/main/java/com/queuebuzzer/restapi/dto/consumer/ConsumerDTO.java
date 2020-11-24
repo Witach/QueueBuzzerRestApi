@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ConsumerDTO {
     String consumerCode;
+    String emial;
 }

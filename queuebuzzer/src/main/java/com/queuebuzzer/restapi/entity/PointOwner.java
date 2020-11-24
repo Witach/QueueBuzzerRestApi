@@ -9,14 +9,13 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class PointOwner {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+public class PointOwner extends AppUser {
 
-    String emial;
-    String password;
+    @Builder
+    public PointOwner(Long id, String emial, String password, Point point) {
+        super(id, emial, password);
+        this.point = point;
+    }
 
     @ManyToOne
     Point point;

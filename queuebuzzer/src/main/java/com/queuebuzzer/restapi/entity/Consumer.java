@@ -8,14 +8,15 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class Consumer{
+public class Consumer extends AppUser {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    @Builder
+    public Consumer(Long id, String emial, String password, String consumerCode, List<ConsumerOrder> consumerOrders) {
+        super(id, emial, password);
+        this.consumerCode = consumerCode;
+        this.consumerOrders = consumerOrders;
+    }
 
     String consumerCode;
 

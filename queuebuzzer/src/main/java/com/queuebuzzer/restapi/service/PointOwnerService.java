@@ -12,6 +12,7 @@ import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.utils.EntityDoesNotExistsException;
 import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -30,6 +31,9 @@ public class  PointOwnerService {
 
     @Autowired
     PointRepository pointRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     @Autowired
@@ -70,6 +74,7 @@ public class  PointOwnerService {
 
     public PointOwnerDTO addEntity(PointOwnerPostDTO dto) {
         var newPointOwner = entityMapper.convertIntoPointOwner(dto);
+        newPointOwner.setPassword(passwordEncoder.encode(newPointOwner.getPassword()));
         var persistedPointOwner = repository.save(newPointOwner);
         return entityMapper.convertIntoPointOwnerDTO(persistedPointOwner);
     }
