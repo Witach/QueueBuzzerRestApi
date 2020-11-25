@@ -9,5 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface ConsumerOrderRepository extends JpaRepository<ConsumerOrder, Long> {
-    List<ConsumerOrder> findAllByConsumer_IdAndOrderStateEquals(Long consumer_id, OrderState orderState);
+    @Query("from ConsumerOrder c where c.consumer.id = :consumer_id and c.orderState.name in :orderStates")
+    List<ConsumerOrder> findAllByConsumer_IdAndOrOrderStateIn(Long consumer_id, List<String> orderStates);
+
+    List<ConsumerOrder> findByPointIdAndOrderStateIn(Long pointId, List<OrderState> orderStates);
 }

@@ -6,6 +6,7 @@ import com.queuebuzzer.restapi.dto.consumer.ConsumerPostDTO;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
 import com.queuebuzzer.restapi.entity.ConsumerOrder;
+import com.queuebuzzer.restapi.entity.OrderState;
 import com.queuebuzzer.restapi.repository.ConsumerOrderRepository;
 import com.queuebuzzer.restapi.repository.ConsumerRepository;
 import com.queuebuzzer.restapi.repository.OrderStateRepository;
@@ -18,6 +19,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.queuebuzzer.restapi.utils.DefaultStates.DEFAULT_STATES;
 
 @Service
 public class ConsumerService {
@@ -77,10 +80,11 @@ public class ConsumerService {
                 );
     }
 
-    public List<ConsumerOrderDTO> getConsumerOrderList(Long id) {
-        var activeState = orderStateRepository.getActiveState()
-                .orElseThrow();
-        return consumerOrderRepository.findAllByConsumer_IdAndOrderStateEquals(id, activeState).stream()
+    public List<ConsumerOrderDTO> getConsumerOrderList(Long id, List<String> states) {
+        if(states == null || states.isEmpty()){
+            states = DEFAULT_STATES;
+        }
+        return consumerOrderRepository.findAllByConsumer_IdAndOrOrderStateIn(id, states).stream()
                 .map(entityMapper::convertConsumerOrderIntoDTO)
                 .collect(Collectors.toList());
     }

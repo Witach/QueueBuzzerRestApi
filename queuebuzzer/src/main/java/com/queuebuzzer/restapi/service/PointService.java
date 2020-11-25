@@ -1,11 +1,14 @@
 package com.queuebuzzer.restapi.service;
 
 import com.queuebuzzer.restapi.dto.EntityMapper;
+import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
+import com.queuebuzzer.restapi.entity.ConsumerOrder;
 import com.queuebuzzer.restapi.entity.OrderState;
 import com.queuebuzzer.restapi.entity.Point;
+import com.queuebuzzer.restapi.repository.ConsumerOrderRepository;
 import com.queuebuzzer.restapi.repository.OrderStateRepository;
 import com.queuebuzzer.restapi.repository.PointRepository;
 import com.queuebuzzer.restapi.repository.ProductRepository;
@@ -18,6 +21,7 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Objects.requireNonNullElse;
@@ -37,6 +41,9 @@ public class PointService {
     @Autowired
     ProductRepository productRepository;
 
+    @Autowired
+    ConsumerOrderRepository consumerOrderRepository;
+
     static String EXCPETION_PATTERN_STRING = "Point with id = %s does not exist";
 
     public PointDTO getEntityById(Long id) {
@@ -48,6 +55,17 @@ public class PointService {
         return repository.findAll().stream()
                 .map(entityMapper::convertPointIntoDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<ConsumerOrderDTO> getOrders(Long id, List<String> state) {
+        var orderStates = orderStateRepository.findAllByName(id, state);
+        if (orderStates.isEmpty()){
+            orderStates = orderStateRepository.findAllByPointId(id);
+        }
+        var pointOrders = consumerOrderRepository.findByPointIdAndOrderStateIn(id, orderStates);
+        return pointOrders.stream().map(
+                entityMapper::convertConsumerOrderIntoDTO
+        ).collect(Collectors.toList());
     }
 
     public void updateEntity(PointPostDTO dto, Long id) {

@@ -5,6 +5,7 @@ import com.queuebuzzer.restapi.dto.consumer.ConsumerPostDTO;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
 import com.queuebuzzer.restapi.entity.ConsumerOrder;
+import com.queuebuzzer.restapi.entity.OrderState;
 import com.queuebuzzer.restapi.repository.ConsumerRepository;
 import com.queuebuzzer.restapi.service.ConsumerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class ConsumerController {
 
     @ResponseStatus(OK)
     @GetMapping("/{id}/orders")
-    public List<ConsumerOrderDTO> consumerOrderList(@PathVariable Long id) {
-        return service.getConsumerOrderList(id);
+    public List<ConsumerOrderDTO> consumerOrderList(@PathVariable Long id, @RequestParam(required = false) List<String> states) {
+        return service.getConsumerOrderList(id, states);
     }
  }

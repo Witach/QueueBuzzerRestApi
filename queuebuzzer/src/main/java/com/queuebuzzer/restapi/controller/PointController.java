@@ -1,6 +1,7 @@
 package com.queuebuzzer.restapi.controller;
 
 import com.queuebuzzer.restapi.dto.EntityMapper;
+import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
@@ -36,6 +37,12 @@ public class PointController {
     @GetMapping
     public List<PointDTO> get() {
         return service.getAllEntities();
+    }
+
+    @ResponseStatus(OK)
+    @GetMapping("/{id}/orders")
+    public List<ConsumerOrderDTO> getOrdersOfPoint(@PathVariable Long id, @RequestParam(required = false) List<String> state) {
+        return service.getOrders(id, state);
     }
 
     @ResponseStatus(CREATED)

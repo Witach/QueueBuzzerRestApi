@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.queuebuzzer.restapi.utils.DefaultStates.DEFAULT_STATES;
 import static com.queuebuzzer.restapi.utils.ListUtils.randomChoice;
 
 @Component
@@ -68,7 +69,8 @@ public class DBFeed implements CommandLineRunner {
 
     @Transactional
     public Point fakePoint() {
-        var defaultOrderStates = orderStateRepository.getDefaultStates();
+        var defaultOrderStates = getInstancesOfDefaultStates();
+
         var point = Point.builder()
                 .colour(getFakeColour())
                 .avgAwaitTime(getFakeAwgTime())
@@ -80,6 +82,8 @@ public class DBFeed implements CommandLineRunner {
                 .currentMaxQueueNumber(0L)
                 .maxQueueNumber(99L)
                 .build();
+
+        orderStateRepository.saveAll(defaultOrderStates);
         defaultOrderStates.forEach(orderState -> orderState.setPoint(point));
         point.getConsumerOrderList().forEach(pointConsumerOrderBinder(point));
         point.getProductList().forEach(product -> product.setPoint(point));
@@ -92,6 +96,12 @@ public class DBFeed implements CommandLineRunner {
         point.getOrderStateList().addAll(defaultOrderStates);
         stateRepository.saveAll(point.getOrderStateList());
         return point;
+    }
+
+    private List<OrderState> getInstancesOfDefaultStates() {
+        return DEFAULT_STATES.stream().map(name -> OrderState.builder()
+        .name(name)
+        .build()).collect(Collectors.toList());
     }
 
 
