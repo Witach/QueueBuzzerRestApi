@@ -89,11 +89,14 @@ public class ConsumerOrderService {
         var point = pointRepository.findById(dto.getPointId()).orElseThrow(EntityExistsException::new);
         var consumer = consumerRepository.findById(dto.getConsumerId()).orElseThrow(EntityExistsException::new);
         var products = getProductsOfList(dto.getProductsIds());
-        var activeState = orderStateRepository.getStartState().orElseThrow(EntityExistsException::new);
+        var activeState = orderStateRepository.findByNameAndPointId("ACCEPTED", point.getId())
+                .orElseThrow(
+                        EntityExistsException::new
+                );
 
 
         incrementQueueNumber(newConsumerOrder, point);
-        newConsumerOrder.setOrderState(orderStateRepository.getStartState().orElseThrow(EntityExistsException::new));
+        newConsumerOrder.setOrderState(orderStateRepository.findByNameAndPointId("ACCEPTED", point.getId()).orElseThrow(EntityExistsException::new));
         newConsumerOrder.setProductList(products);
         newConsumerOrder.setPoint(point);
         newConsumerOrder.setConsumer(consumer);

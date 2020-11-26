@@ -15,6 +15,7 @@ public interface OrderStateRepository extends JpaRepository<OrderState, Long> {
     List<OrderState> getDefaultStates();
 
     Optional<OrderState> findByName(String name);
+    Optional<OrderState> findByNameAndPointId(String name, Long pointId);
     @Query("from OrderState o where o.point.id = :id and  o.name in :names")
     List<OrderState> findAllByName(Long id, List<String> names);
 

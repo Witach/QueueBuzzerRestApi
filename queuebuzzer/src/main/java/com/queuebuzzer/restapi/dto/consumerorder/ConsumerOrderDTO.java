@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConsumerOrderDTO {
+    Long id;
     Long consumerId;
     Long pointId;
     String state;
