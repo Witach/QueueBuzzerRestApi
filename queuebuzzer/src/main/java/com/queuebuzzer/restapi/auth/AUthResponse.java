@@ -14,6 +14,7 @@ import static com.queuebuzzer.restapi.auth.JwtUtils.generateToken;
 @NoArgsConstructor
 public class AUthResponse {
     private String jwt;
+    private String userType;
 
     public static AUthResponse instanceFromUserDetails(UserDetails userDetails) {
         return AUthResponse.builder()

@@ -15,6 +15,7 @@ public class ProductDTO {
     Double price;
     String category;
     Boolean avaliability;
+    String img;
     Long point;
     String description;
 }

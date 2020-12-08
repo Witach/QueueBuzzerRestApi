@@ -5,12 +5,10 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 
 @Service
 public class ImageService {
@@ -19,6 +17,11 @@ public class ImageService {
     ResourceLoader resourceLoader;
     public void saveImage(MultipartFile file, String prefix) {
         try {
+            try {
+                Files.createDirectories(Paths.get(prefix));
+            } catch (FileAlreadyExistsException e){
+
+            }
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, Paths.get(prefix), StandardCopyOption.REPLACE_EXISTING);
             }
@@ -29,8 +32,8 @@ public class ImageService {
 
     }
 
-    public byte[] loadImage(Long entityId, String prefix) throws IOException {
-        Path path = Paths.get(prefix + "/" + entityId);
+    public byte[] loadImage(String prefix) throws IOException {
+        Path path = Paths.get(prefix);
         return Files.readAllBytes(path);
     }
 }
