@@ -1,5 +1,7 @@
 package com.queuebuzzer.restapi.auth;
 
+import com.queuebuzzer.restapi.entity.PointOwner;
+import com.queuebuzzer.restapi.repository.AppUserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +26,9 @@ public class AuthController {
     @Autowired
     private UserDetailsService myUserDetailsService;
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
     @GetMapping
     public String hello(){
         return "Hello world";
@@ -35,7 +40,14 @@ public class AuthController {
         authenticationManager.authenticate(authTokenFromAuthRequest(authenticationRequest));
 
         final var userDetails = myUserDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        return ResponseEntity.ok(instanceFromUserDetails(userDetails));
+        final var appUser = appUserRepository.findByEmial(userDetails.getUsername()).orElseThrow();
+        var authResponse = instanceFromUserDetails(userDetails);
+        if(appUser instanceof PointOwner) {
+            authResponse.setUserType("PointOwner");
+        } else {
+            authResponse.setUserType("Consumer");
+        }
+        return ResponseEntity.ok(authResponse);
     }
 
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
