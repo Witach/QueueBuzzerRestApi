@@ -19,7 +19,7 @@ public class Product {
 
     String name;
     Double price;
-    byte[] img;
+    String img;
 
     String category;
     Boolean avaliability;
