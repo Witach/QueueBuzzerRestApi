@@ -16,4 +16,5 @@ public class ConsumerOrderPostDTO {
     Long consumerId;
     Long pointId;
     List<Long> productsIds;
+    String fireBaseToken;
 }
