@@ -62,9 +62,9 @@ public class ConsumerOrderService {
     }
     public void updateEntity(ConsumerOrderPostDTO dto, Long id) {
         if(dto != null){
-            var newState = stateRepository.findByName(dto.getStateName())
-                    .orElseThrow(() -> new EntityDoesNotExistsException(String.format(PointService.EXCPETION_PATTERN_STRING, dto.getStateName())));
             var order = loadEntity(id);
+            var newState = stateRepository.findByNameAndPointId(dto.getStateName(), order.getPoint().getId())
+                    .orElseThrow(() -> new EntityDoesNotExistsException(String.format(PointService.EXCPETION_PATTERN_STRING, dto.getStateName())));
             var oldState = order.getOrderState();
 
             oldState.getConsumerOrderList().remove(order);
