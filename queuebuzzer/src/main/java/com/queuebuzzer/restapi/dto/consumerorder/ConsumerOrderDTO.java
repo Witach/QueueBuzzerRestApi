@@ -16,7 +16,7 @@ public class ConsumerOrderDTO {
     Long id;
     Long consumerId;
     Long pointId;
-    String state;
+    String stateName;
     Long queueNumber;
     List<ProductDTO> productList;
 }
