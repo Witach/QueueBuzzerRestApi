@@ -17,4 +17,5 @@ public class PointPostDTO {
     Long avgAwaitTime;
     String colour;
     List<StatePostDTO> stateList;
+    String logoImg;
 }

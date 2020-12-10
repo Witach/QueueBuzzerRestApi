@@ -7,10 +7,15 @@ import com.queuebuzzer.restapi.dto.point.PointPostDTO;
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
 import com.queuebuzzer.restapi.entity.Consumer;
+import com.queuebuzzer.restapi.service.PointImageService;
 import com.queuebuzzer.restapi.service.PointService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,6 +31,9 @@ public class PointController {
 
     @Autowired
     EntityMapper entityMapper;
+
+    @Autowired
+    PointImageService pointImageService;
 
     @ResponseStatus(OK)
     @GetMapping("/{id}")
@@ -75,5 +83,18 @@ public class PointController {
     @PostMapping("/{id}/products")
     public void postProductsOfPoint(@PathVariable Long id, @RequestBody List<ProductPostDTO> productPostDTOS) {
         service.createMenu(productPostDTOS, id);
+    }
+
+    @ResponseStatus(OK)
+    @GetMapping( value = "/{id}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    public  byte[] getImage(@PathVariable Long id) throws IOException {
+        return pointImageService.loadProductImage(id);
+    }
+
+    @ResponseStatus(OK)
+    @PostMapping("/{id}/image")
+    public void  saveImage(@PathVariable Long id, HttpServletRequest request, @RequestParam("file") MultipartFile file) {
+        var url = request.getRequestURL().toString();
+        pointImageService.saveProductImage(file, id, url);
     }
 }
