@@ -15,4 +15,5 @@ public class PointDTO {
     String name;
     Long avgAwaitTime;
     String colour;
+    String logoImg;
 }

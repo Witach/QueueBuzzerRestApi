@@ -77,6 +77,7 @@ public class DBFeed implements CommandLineRunner {
                 .consumerOrderList(fakeConsumerOrderList())
                 .name(faker.pokemon().name())
                 .pointOwnerList(fakePointOwnerList())
+                .logoImg("http://10.0.2.2:8080/logo.png")
                 .orderStateList(defaultOrderStates)
                 .productList(fakeProductsList())
                 .currentMaxQueueNumber(0L)
@@ -135,6 +136,7 @@ public class DBFeed implements CommandLineRunner {
                 .category(randomChoice(categories))
                 .price(Math.round(Math.random() * 10000.0) / 100.0)
                 .name(faker.food().dish())
+                .img("http://10.0.2.2:8080/logo.png")
                 .description(faker.lorem().fixedString(64))
                 .consumerOrderList(new LinkedList<>())
                 .build());

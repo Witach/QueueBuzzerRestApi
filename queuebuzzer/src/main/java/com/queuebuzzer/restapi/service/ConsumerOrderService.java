@@ -1,5 +1,6 @@
 package com.queuebuzzer.restapi.service;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderPostDTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +44,9 @@ public class ConsumerOrderService {
     @Autowired
     ConsumerOrderRepository orderRepository;
 
+    @Autowired
+    NotificationService notificationService;
+
     public ConsumerOrderDTO getEntityById(Long id) {
         var consumer = loadEntity(id);
         return entityMapper.convertConsumerOrderIntoDTO(consumer);
@@ -60,7 +65,7 @@ public class ConsumerOrderService {
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
     }
-    public void updateEntity(ConsumerOrderPostDTO dto, Long id) {
+    public void updateEntity(ConsumerOrderPostDTO dto, Long id, String url) throws FirebaseMessagingException {
         if(dto != null){
             var order = loadEntity(id);
             var newState = stateRepository.findByNameAndPointId(dto.getStateName(), order.getPoint().getId())
@@ -70,7 +75,9 @@ public class ConsumerOrderService {
             oldState.getConsumerOrderList().remove(order);
             newState.getConsumerOrderList().add(order);
             order.setOrderState(newState);
-            //TODO notify consumer about finished order, to implementation
+            if(newState.getName().equals("READY") && Objects.nonNull(order.getFireBaseToken())) {
+                notificationService.notifyUserAboutOrder(order, url);
+            }
             orderRepository.save(order);
             stateRepository.save(oldState);
             stateRepository.save(newState);

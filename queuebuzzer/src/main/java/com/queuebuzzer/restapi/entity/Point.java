@@ -19,8 +19,7 @@ public class Point {
     Long id;
 
     String name;
-    byte[] img;
-    byte[] logoImg;
+    String logoImg;
     Long avgAwaitTime;
     String colour;
     Long currentMaxQueueNumber;

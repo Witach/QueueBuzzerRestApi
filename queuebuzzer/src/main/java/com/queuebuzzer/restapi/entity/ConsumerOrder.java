@@ -31,4 +31,6 @@ public class ConsumerOrder {
 
     @ManyToMany
     List<Product> productList;
+
+    String fireBaseToken;
 }
