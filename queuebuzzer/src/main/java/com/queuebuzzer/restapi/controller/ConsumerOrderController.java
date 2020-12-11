@@ -3,6 +3,7 @@ package com.queuebuzzer.restapi.controller;
 import com.google.firebase.messaging.FirebaseMessagingException;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderPostDTO;
+import com.queuebuzzer.restapi.dto.consumerorder.EditConsumerOrder;
 import com.queuebuzzer.restapi.service.ConsumerOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class ConsumerOrderController {
 
     @ResponseStatus(CREATED)
     @PatchMapping("/{id}")
-    public void update(@RequestBody ConsumerOrderPostDTO dto, @PathVariable Long id, HttpServletRequest request) throws FirebaseMessagingException {
+    public void update(@RequestBody EditConsumerOrder dto, @PathVariable Long id, HttpServletRequest request) throws FirebaseMessagingException {
         service.updateEntity(dto, id, request.getRequestURL().toString().replace(request.getRequestURI(), ""));
     }
 
