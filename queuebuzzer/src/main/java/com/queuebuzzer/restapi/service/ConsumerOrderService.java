@@ -4,7 +4,6 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderPostDTO;
-import com.queuebuzzer.restapi.dto.consumerorder.EditConsumerOrder;
 import com.queuebuzzer.restapi.entity.ConsumerOrder;
 import com.queuebuzzer.restapi.entity.Product;
 import com.queuebuzzer.restapi.repository.*;
@@ -66,7 +65,7 @@ public class ConsumerOrderService {
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
     }
-    public void updateEntity(EditConsumerOrder dto, Long id, String url) throws FirebaseMessagingException {
+    public void updateEntity(ConsumerOrderPostDTO dto, Long id, String url) throws FirebaseMessagingException {
         if(dto != null){
             var order = loadEntity(id);
             var newState = stateRepository.findByNameAndPointId(dto.getStateName(), order.getPoint().getId())
