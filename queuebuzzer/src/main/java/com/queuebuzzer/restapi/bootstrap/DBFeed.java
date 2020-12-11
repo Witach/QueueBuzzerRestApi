@@ -41,7 +41,7 @@ public class DBFeed implements CommandLineRunner {
     @Value("${fake-generator.enabled}")
     boolean enabled;
 
-    List<String> fakeColours = List.of("#ffffff", "#000000", "#ff0000", "#00ff00", "#0000ff", "#0004ff");
+    List<String> fakeColours = List.of("#8F3A84", "#000000", "#a64dff", "#FF6F61", "#ff3300", "#88B04B");
 
     public DBFeed(PointRepository pointRepository, PointOwnerRepository pointOwnerRepository, ConsumerRepository consumerRepository, ConsumerOrderRepository consumerOrderRepository, OrderStateRepository stateRepository, ProductRepository productRepository, Faker faker) {
         this.pointRepository = pointRepository;
