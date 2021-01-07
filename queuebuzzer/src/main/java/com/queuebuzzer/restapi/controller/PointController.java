@@ -4,9 +4,9 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
+import com.queuebuzzer.restapi.dto.point.PointStats;
 import com.queuebuzzer.restapi.dto.product.ProductDTO;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
-import com.queuebuzzer.restapi.entity.Consumer;
 import com.queuebuzzer.restapi.service.PointImageService;
 import com.queuebuzzer.restapi.service.PointService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController("point")
 @RequestMapping("/point")
@@ -34,6 +33,9 @@ public class PointController {
 
     @Autowired
     PointImageService pointImageService;
+
+    @Autowired
+    PointService pointService;
 
     @ResponseStatus(OK)
     @GetMapping("/{id}")
@@ -96,5 +98,11 @@ public class PointController {
     public void  saveImage(@PathVariable Long id, HttpServletRequest request, @RequestParam("file") MultipartFile file) {
         var url = request.getRequestURL().toString();
         pointImageService.saveProductImage(file, id, url);
+    }
+
+    @ResponseStatus(OK)
+    @GetMapping("/{id}/image")
+    public PointStats stats(@PathVariable Long id) {
+        return pointService.getTimeOfDelay(id);
     }
 }

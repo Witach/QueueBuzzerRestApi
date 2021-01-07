@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -77,6 +78,7 @@ public class ConsumerOrderService {
             order.setOrderState(newState);
             if(newState.getName().equals("READY") && Objects.nonNull(order.getFireBaseToken())) {
                 notificationService.notifyUserAboutOrder(order, url);
+                order.setEndOfService(LocalDateTime.now());
             }
             orderRepository.save(order);
             stateRepository.save(oldState);
@@ -93,6 +95,7 @@ public class ConsumerOrderService {
 
     public ConsumerOrderDTO addEntity(ConsumerOrderPostDTO dto) {
         var newConsumerOrder = entityMapper.convertIntoConsumerOrder(dto);
+        newConsumerOrder.setStartOfService(LocalDateTime.now());
         var point = pointRepository.findById(dto.getPointId()).orElseThrow(EntityExistsException::new);
         var consumer = consumerRepository.findById(dto.getConsumerId()).orElseThrow(EntityExistsException::new);
         var products = getProductsOfList(dto.getProductsIds());

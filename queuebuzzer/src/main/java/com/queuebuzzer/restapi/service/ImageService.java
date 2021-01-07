@@ -35,5 +35,6 @@ public class ImageService {
     public byte[] loadImage(String prefix) throws IOException {
         Path path = Paths.get(prefix);
         return Files.readAllBytes(path);
+
     }
 }

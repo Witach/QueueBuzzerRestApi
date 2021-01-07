@@ -11,6 +11,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -184,6 +187,8 @@ public class DBFeed implements CommandLineRunner {
         return consumerOrderRepository.save(ConsumerOrder.builder()
                 .productList(new LinkedList<>())
                 .queueNumber(0L)
+                .startOfService(LocalDateTime.of(LocalDate.now(), LocalTime.now().minusHours(1)))
+                .endOfService(LocalDateTime.now())
                 .build());
     }
 

@@ -5,16 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class PointDTO {
-    Long id;
-    String name;
-    Long avgAwaitTime;
-    String colour;
-    String logoImg;
-    Long delay;
+@NoArgsConstructor
+public class PointStats {
+    Double delay;
 }

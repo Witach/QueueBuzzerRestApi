@@ -4,6 +4,7 @@ import com.queuebuzzer.restapi.dto.EntityMapper;
 import com.queuebuzzer.restapi.dto.consumerorder.ConsumerOrderDTO;
 import com.queuebuzzer.restapi.dto.point.PointDTO;
 import com.queuebuzzer.restapi.dto.point.PointPostDTO;
+import com.queuebuzzer.restapi.dto.point.PointStats;
 import com.queuebuzzer.restapi.dto.product.ProductPostDTO;
 import com.queuebuzzer.restapi.entity.ConsumerOrder;
 import com.queuebuzzer.restapi.entity.OrderState;
@@ -18,6 +19,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
+import java.time.Duration;
+import java.time.Period;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -47,13 +53,20 @@ public class PointService {
     static String EXCPETION_PATTERN_STRING = "Point with id = %s does not exist";
 
     public PointDTO getEntityById(Long id) {
-        var Point = loadEntity(id);
-        return entityMapper.convertPointIntoDTO(Point);
+        var point = loadEntity(id);
+        return convertIntoDTOWithDelay(point);
+    }
+
+    private PointDTO convertIntoDTOWithDelay(Point point) {
+        var pointStats = getTimeOfDelay(point.getId());
+        var dto = entityMapper.convertPointIntoDTO(point);
+        dto.setDelay((long)Math.ceil(pointStats.getDelay()));
+        return dto;
     }
 
     public List<PointDTO> getAllEntities() {
         return repository.findAll().stream()
-                .map(entityMapper::convertPointIntoDTO)
+                .map(this::convertIntoDTOWithDelay)
                 .collect(Collectors.toList());
     }
 
@@ -121,5 +134,30 @@ public class PointService {
                 .orElseThrow(
                         () -> new EntityDoesNotExistsException(String.format(EXCPETION_PATTERN_STRING , id))
                 );
+    }
+
+    public PointStats getTimeOfDelay(Long pointID) {
+        var listOfOrders = repository.findById(pointID)
+                .orElseThrow()
+                .getConsumerOrderList()
+                .stream()
+                .filter(consumerOrder -> consumerOrder.getOrderState().getName().equals("DONE") || consumerOrder.getOrderState().getName().equals("READY"))
+                .collect(Collectors.toList());
+
+        var countOfOrders = listOfOrders.size();
+
+        var sumOfDelay = listOfOrders.stream()
+                .map(this::calculateTimeDelay)
+                .reduce(0L, Long::sum);
+
+        return PointStats.builder()
+                .delay((double)sumOfDelay / (double)countOfOrders)
+                .build();
+    }
+
+    private Long calculateTimeDelay(ConsumerOrder element) {
+        var startDate = element.getStartOfService();
+        var endDate = element.getEndOfService();
+        return ChronoUnit.MINUTES.between(startDate, endDate);
     }
 }

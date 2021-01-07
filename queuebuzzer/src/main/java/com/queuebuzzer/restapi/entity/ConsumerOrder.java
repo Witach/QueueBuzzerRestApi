@@ -3,6 +3,7 @@ package com.queuebuzzer.restapi.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -33,4 +34,8 @@ public class ConsumerOrder {
     List<Product> productList;
 
     String fireBaseToken;
+
+    LocalDateTime startOfService;
+
+    LocalDateTime endOfService;
 }
